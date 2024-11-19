@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35507.96 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorAppQuestPDF", "BlazorAppQuestPDF\BlazorAppQuestPDF\BlazorAppQuestPDF.csproj", "{5772B017-0412-4170-8273-43852BCBEEAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorAppQuestPDF.Client", "BlazorAppQuestPDF\BlazorAppQuestPDF.Client\BlazorAppQuestPDF.Client.csproj", "{4A483510-B04E-4D44-BB51-B6DA88BCF582}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5772B017-0412-4170-8273-43852BCBEEAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5772B017-0412-4170-8273-43852BCBEEAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5772B017-0412-4170-8273-43852BCBEEAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5772B017-0412-4170-8273-43852BCBEEAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A483510-B04E-4D44-BB51-B6DA88BCF582}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A483510-B04E-4D44-BB51-B6DA88BCF582}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A483510-B04E-4D44-BB51-B6DA88BCF582}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A483510-B04E-4D44-BB51-B6DA88BCF582}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4A4B5A95-41C2-49AC-9763-33E96B1C77C6}
+	EndGlobalSection
+EndGlobal
