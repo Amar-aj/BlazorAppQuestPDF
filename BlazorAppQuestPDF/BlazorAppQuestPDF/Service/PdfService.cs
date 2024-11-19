@@ -13,6 +13,7 @@ public class PdfService
         _configuration = configuration;
     }
 
+
     public byte[] GenerateMarriageCertificatePdf(MarriageRegistrationCertificate certificate)
     {
         QuestPDF.Settings.License = LicenseType.Community;
@@ -35,38 +36,159 @@ public class PdfService
                 page.DefaultTextStyle(x => x.FontSize(12).FontFamily("Times New Roman"));
 
                 // Header
-                page.Header().PaddingBottom(15).Column(column =>
+                page.Header().Column(column =>
                 {
-                    column.Item().Text("Marriage Registration Certificate").FontSize(24).Bold().AlignCenter();
-                    column.Item().Text($"Store Name: {storeName}").AlignCenter();
-                    column.Item().Text($"Phone: {storePhone}").AlignCenter();
-                    column.Item().Text($"Address: {storeAddress}").AlignCenter();
+                    column.Item().PaddingBottom(10).Column(headerColumn =>
+                    {
+                        headerColumn.Item().Text("MARRIAGE REGISTRATION CERTIFICATE")
+                            .FontSize(18)
+                            .Bold()
+                            .AlignCenter();
+                        headerColumn.Item().Text($"Store Name: {storeName}")
+                            .FontSize(14)
+                            .AlignCenter();
+                        headerColumn.Item().Text($"Phone: {storePhone}")
+                            .FontSize(14)
+                            .AlignCenter();
+                        headerColumn.Item().Text($"Address: {storeAddress}")
+                            .FontSize(14)
+                            .AlignCenter();
+                    });
                 });
 
                 // Content
                 page.Content().Column(column =>
                 {
-                    // Marriage Information
-                    column.Item().Text($"Registration No: {certificate.RegdNo}").Bold();
-                    column.Item().Text($"Date of Application: {certificate.DateOfApplication.ToShortDateString()}");
-                    column.Item().Text($"Husband: {certificate.Husband.Name}, Address: {certificate.Husband.Address}");
-                    column.Item().Text($"Wife: {certificate.Wife.Name}, Address: {certificate.Wife.Address}");
-                    column.Item().Text($"Date of Marriage: {certificate.DateOfMarriage.ToShortDateString()}");
-                    column.Item().Text($"Place of Marriage: {certificate.PlaceOfMarriage}");
-                    column.Item().Text($"Husband Date of Birth: {certificate.HusbandDateOfBirth.ToShortDateString()}");
-                    column.Item().Text($"Wife Date of Birth: {certificate.WifeDateOfBirth.ToShortDateString()}");
-                    column.Item().Text($"Husband Guardian: {certificate.HusbandGuardian.Name}, Address: {certificate.HusbandGuardian.Address}");
-                    column.Item().Text($"Wife Guardian: {certificate.WifeGuardian.Name}, Address: {certificate.WifeGuardian.Address}");
+                    // Registration Details
+                    column.Item().PaddingTop(10).Column(detailsColumn =>
+                    {
+                        detailsColumn.Item().Text("Registration Details")
+                            .FontSize(16)
+                            .Bold();
+                        detailsColumn.Item().Row(row =>
+                        {
+                            row.RelativeItem().Text("Registration No: ");
+                            row.RelativeItem(0.5f).Text(" : "); // Middle column with smaller size
+                            row.RelativeItem().Text(certificate.RegdNo);
+                        });
+                        detailsColumn.Item().Row(row =>
+                        {
+                            row.RelativeItem().Text("Date of Application: ");
+                            row.RelativeItem(0.5f).Text(" : "); // Middle column with smaller size
+                            row.RelativeItem().Text(certificate.DateOfApplication.ToShortDateString());
+                        });
+                    });
+
+                    // Husband Details
+                    column.Item().PaddingTop(10).Column(husbandColumn =>
+                    {
+                        husbandColumn.Item().Text("Husband Details")
+                            .FontSize(16)
+                            .Bold();
+                        husbandColumn.Item().Row(row =>
+                        {
+                            row.RelativeItem().Text("Name: ");
+                            row.RelativeItem(0.5f).Text(" : ");
+                            row.RelativeItem().Text(certificate.Husband.Name);
+                        });
+                        husbandColumn.Item().Row(row =>
+                        {
+                            row.RelativeItem().Text("Address: ");
+                            row.RelativeItem(0.5f).Text(" : ");
+                            row.RelativeItem().Text(certificate.Husband.Address);
+                        });
+                        husbandColumn.Item().Row(row =>
+                        {
+                            row.RelativeItem().Text("Date of Birth: ");
+                            row.RelativeItem(0.5f).Text(" : ");
+                            row.RelativeItem().Text(certificate.HusbandDateOfBirth.ToShortDateString());
+                        });
+                    });
+
+                    // Wife Details
+                    column.Item().PaddingTop(10).Column(wifeColumn =>
+                    {
+                        wifeColumn.Item().Text("Wife Details")
+                            .FontSize(16)
+                            .Bold();
+                        wifeColumn.Item().Row(row =>
+                        {
+                            row.RelativeItem().Text("Name: ");
+                            row.RelativeItem(0.5f).Text(" : ");
+                            row.RelativeItem().Text(certificate.Wife.Name);
+                        });
+                        wifeColumn.Item().Row(row =>
+                        {
+                            row.RelativeItem().Text("Address: ");
+                            row.RelativeItem(0.5f).Text(" : ");
+                            row.RelativeItem().Text(certificate.Wife.Address);
+                        });
+                        wifeColumn.Item().Row(row =>
+                        {
+                            row.RelativeItem().Text("Date of Birth: ");
+                            row.RelativeItem(0.5f).Text(" : ");
+                            row.RelativeItem().Text(certificate.WifeDateOfBirth.ToShortDateString());
+                        });
+                    });
+
+                    // Marriage Details
+                    column.Item().PaddingTop(10).Column(marriageColumn =>
+                    {
+                        marriageColumn.Item().Text("Marriage Details")
+                            .FontSize(16)
+                            .Bold();
+                        marriageColumn.Item().Row(row =>
+                        {
+                            row.RelativeItem().Text("Date of Marriage: ");
+                            row.RelativeItem(0.5f).Text(" : ");
+                            row.RelativeItem().Text(certificate.DateOfMarriage.ToShortDateString());
+                        });
+                        marriageColumn.Item().Row(row =>
+                        {
+                            row.RelativeItem().Text("Place of Marriage: ");
+                            row.RelativeItem(0.5f).Text(" : ");
+                            row.RelativeItem().Text(certificate.PlaceOfMarriage);
+                        });
+                    });
+
+                    // Guardian Details
+                    column.Item().PaddingTop(10).Column(guardianColumn =>
+                    {
+                        guardianColumn.Item().Text("Guardian Details")
+                            .FontSize(16)
+                            .Bold();
+                        guardianColumn.Item().Row(row =>
+                        {
+                            row.RelativeItem().Text("Husband's Guardian: ");
+                            row.RelativeItem(0.5f).Text(" : ");
+                            row.RelativeItem().Text($"{certificate.HusbandGuardian.Name}, Address: {certificate.HusbandGuardian.Address}");
+                        });
+                        guardianColumn.Item().Row(row =>
+                        {
+                            row.RelativeItem().Text("Wife's Guardian: ");
+                            row.RelativeItem(0.5f).Text(" : ");
+                            row.RelativeItem().Text($"{certificate.WifeGuardian.Name}, Address: {certificate.WifeGuardian.Address}");
+                        });
+                    });
 
                     // Witnesses
-                    column.Item().Text("Witnesses:").Bold();
-                    foreach (var witness in certificate.Witnesses)
+                    column.Item().PaddingTop(10).Column(witnessColumn =>
                     {
-                        column.Item().Text($"- {witness.Name}, Address: {witness.Address}");
-                    }
+                        witnessColumn.Item().Text("Witnesses")
+                            .FontSize(16)
+                            .Bold();
+                        foreach (var witness in certificate.Witnesses)
+                        {
+                            witnessColumn.Item().Row(row =>
+                            {
+                                row.RelativeItem().Text("- ");
+                                row.RelativeItem().Text($"{witness.Name}, Address: {witness.Address}");
+                            });
+                        }
+                    });
 
                     // Remarks
-                    column.Item().Text($"Remark: {certificate.Remark}");
+                    column.Item().PaddingTop(10).Text($"Remark: {certificate.Remark}");
                     column.Item().Text($"Memo No: {certificate.MemoNo}");
                     column.Item().Text($"Registrar: {certificate.Registrar}");
                     column.Item().Text($"Block: {certificate.Block}");
@@ -84,4 +206,5 @@ public class PdfService
 
         return stream.ToArray();
     }
+
 }
