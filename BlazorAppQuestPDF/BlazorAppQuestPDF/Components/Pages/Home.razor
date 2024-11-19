@@ -1,7 +1,71 @@
 ﻿@page "/"
+@using BlazorAppQuestPDF.Service
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
+<h3>Marriage Registration Certificate</h3>
+<p>Registration No: @marriageCertificate.RegdNo</p>
+<p>Date of Application: @marriageCertificate.DateOfApplication.ToShortDateString()</p>
+<p>Husband: @marriageCertificate.Husband.Name, Address: @marriageCertificate.Husband.Address</p>
+<p>Wife: @marriageCertificate.Wife.Name, Address: @marriageCertificate.Wife.Address</p>
+<p>Date of Marriage: @marriageCertificate.DateOfMarriage.ToShortDateString()</p>
+<p>Place of Marriage: @marriageCertificate.PlaceOfMarriage</p>
+<p>Husband Date of Birth: @marriageCertificate.HusbandDateOfBirth.ToShortDateString()</p>
+<p>Wife Date of Birth: @marriageCertificate.WifeDateOfBirth.ToShortDateString()</p>
+<p>Husband Guardian: @marriageCertificate.HusbandGuardian.Name, Address: @marriageCertificate.HusbandGuardian.Address</p>
+<p>Wife Guardian: @marriageCertificate.WifeGuardian.Name, Address: @marriageCertificate.WifeGuardian.Address</p>
+<p>Witnesses:</p>
+<ul>
+    @foreach (var witness in marriageCertificate.Witnesses)
+    {
+        <li>@witness.Name, Address: @witness.Address</li>
+    }
+</ul>
+<p>Remark: @marriageCertificate.Remark</p>
+<p>Memo No: @marriageCertificate.MemoNo</p>
+<p>Registrar: @marriageCertificate.Registrar</p>
+<p>Block: @marriageCertificate.Block</p>
+<p>District: @marriageCertificate.District</p>
+
+
+
+
+@code{
+    private MarriageRegistrationCertificate marriageCertificate;
+
+    protected override void OnInitialized()
+    {
+        var husband = new Person("JAGANMAYA PANY", "At: Saraberani, PO: Sanda, Dist-Dhenakanal, State: Odisha");
+        var wife = new Person("DEEPANJALI PANDA", "At: Saraberani, PO: Sanda, PS:1 Dist-Dhenakanal, State: Odisha");
+        var husbandGuardian = new Guardian("Kahnu Charan Pany", "At: Saraberani, PO: Sanda, PS:Parjang Dist-Dhenakanal, State: Odisha- 759019");
+        var wifeGuardian = new Guardian("Trilochan Panda", "At: Panchapada, PO: Panchapada, PS: Rasol, Dist-Dhenakanal, State: Odisha");
+        var witnesses = new Witness[]
+        {
+            new Witness("Manas Ranjan Pany", "At: Saraberani, PO: Sanda, PS:Parjang, Dist: Dhenkanal, State: Odisha"),
+            new Witness("Purnananda Pany", "At: Saraberani, PO: Sanda, PS:Parjang, Dist: Dhenkanal, State: Odisha")
+        };
+
+        marriageCertificate = new MarriageRegistrationCertificate(
+            "Regd No", // Replace with actual registration number
+            DateTime.Now, // Replace with actual date of application
+            husband,
+            wife,
+            new DateTime(2019, 02, 24),
+            "At: Panchapada, PO: Panchapada, PS: Rasol, Dist-Dhenakanal, State: Odisha", // Place of Marriage
+            new DateTime(1988, 04, 28),
+            new DateTime(1991, 07, 02),
+            husbandGuardian,
+            wifeGuardian,
+            witnesses,
+            "The marriage has been registered under Hindu marriage registration rule- 1955.",
+            "Memo No", // Replace with actual memo number
+            "Registrar, Hindu Marriage-cum-Addl.", // Registrar name
+            "Parjang Block", // Block name
+            "Dhenkanal" // District name
+        );
+
+        var pdfGenerator = new PdfGenerator();
+        pdfGenerator.GenerateMarriageCertificatePdf(marriageCertificate);
+    }
+}
