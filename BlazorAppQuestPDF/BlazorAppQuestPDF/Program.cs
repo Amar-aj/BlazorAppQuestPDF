@@ -1,5 +1,6 @@
 using BlazorAppQuestPDF.Client.Pages;
 using BlazorAppQuestPDF.Components;
+using BlazorAppQuestPDF.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
-
+builder.Services.AddScoped<PdfService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

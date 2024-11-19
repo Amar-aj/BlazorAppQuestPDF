@@ -1,41 +1,29 @@
-﻿@page "/"
+﻿@page "/generate-pdf"
+@rendermode InteractiveServer
 @using BlazorAppQuestPDF.Service
+@inject PdfService PdfService
+@inject IJSRuntime JSRuntime
+<h3>Generate Marriage Certificate PDF</h3>
 
-<PageTitle>Home</PageTitle>
+<button class="btn btn-primary" @onclick="GeneratePdfFile">Generate PDF</button>
 
+@if (pdfGenerated)
+{
+    <p>PDF generated successfully!</p>
+}
+else if (pdfError)
+{
+    <p>Error generating PDF.</p>
+}
 
-<h3>Marriage Registration Certificate</h3>
-<p>Registration No: @marriageCertificate.RegdNo</p>
-<p>Date of Application: @marriageCertificate.DateOfApplication.ToShortDateString()</p>
-<p>Husband: @marriageCertificate.Husband.Name, Address: @marriageCertificate.Husband.Address</p>
-<p>Wife: @marriageCertificate.Wife.Name, Address: @marriageCertificate.Wife.Address</p>
-<p>Date of Marriage: @marriageCertificate.DateOfMarriage.ToShortDateString()</p>
-<p>Place of Marriage: @marriageCertificate.PlaceOfMarriage</p>
-<p>Husband Date of Birth: @marriageCertificate.HusbandDateOfBirth.ToShortDateString()</p>
-<p>Wife Date of Birth: @marriageCertificate.WifeDateOfBirth.ToShortDateString()</p>
-<p>Husband Guardian: @marriageCertificate.HusbandGuardian.Name, Address: @marriageCertificate.HusbandGuardian.Address</p>
-<p>Wife Guardian: @marriageCertificate.WifeGuardian.Name, Address: @marriageCertificate.WifeGuardian.Address</p>
-<p>Witnesses:</p>
-<ul>
-    @foreach (var witness in marriageCertificate.Witnesses)
-    {
-        <li>@witness.Name, Address: @witness.Address</li>
-    }
-</ul>
-<p>Remark: @marriageCertificate.Remark</p>
-<p>Memo No: @marriageCertificate.MemoNo</p>
-<p>Registrar: @marriageCertificate.Registrar</p>
-<p>Block: @marriageCertificate.Block</p>
-<p>District: @marriageCertificate.District</p>
-
-
-
-
-@code{
+@code {
     private MarriageRegistrationCertificate marriageCertificate;
+    private bool pdfGenerated = false;
+    private bool pdfError = false;
 
     protected override void OnInitialized()
     {
+        // Initialize the marriage certificate details
         var husband = new Person("JAGANMAYA PANY", "At: Saraberani, PO: Sanda, Dist-Dhenakanal, State: Odisha");
         var wife = new Person("DEEPANJALI PANDA", "At: Saraberani, PO: Sanda, PS:1 Dist-Dhenakanal, State: Odisha");
         var husbandGuardian = new Guardian("Kahnu Charan Pany", "At: Saraberani, PO: Sanda, PS:Parjang Dist-Dhenakanal, State: Odisha- 759019");
@@ -64,8 +52,27 @@
             "Parjang Block", // Block name
             "Dhenkanal" // District name
         );
+    }
 
-        // var pdfGenerator = new PdfGenerator();
-        // pdfGenerator.GenerateMarriageCertificatePdf(marriageCertificate);
+    private async Task GeneratePdfFile()
+    {
+        try
+        {
+            var pdfBytes = PdfService.GenerateMarriageCertificatePdf(marriageCertificate);
+            var base64 = Convert.ToBase64String(pdfBytes);
+            // Use JavaScript interop to initiate the file download
+            await JSRuntime.InvokeVoidAsync("downloadFile", $"MarriageRegistrationCertificate_{marriageCertificate.RegdNo}.pdf", base64);
+            // Here you might want to trigger a download or handle the PDF bytes
+            pdfGenerated = true;
+            pdfError = false;
+
+            // To trigger a download, you might need to use JavaScript interop
+            // For example, you can save the bytes to a file or return them to the client
+        }
+        catch (Exception)
+        {
+            pdfGenerated = false;
+            pdfError = true;
+        }
     }
 }
